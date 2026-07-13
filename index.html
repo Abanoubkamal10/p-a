@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>P&A - My Sweetheart</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg-1: #ffdde1;
+      --bg-2: #ff9a9e;
+      --accent: #d83d6e;
+      --accent-2: #c0345f;
+      --muted: #fffafa;
+      --card-bg: #ffffff;
+      --radius-lg: 20px;
+      --radius-md: 10px;
+      --shadow-soft: 0 10px 30px rgba(0,0,0,0.1);
+      --gap: 20px;
+      --base-font: 16px;
+    }
+
+    *{box-sizing:border-box}
+    html{font-size:var(--base-font)}
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      background: linear-gradient(to bottom right, var(--bg-1), var(--bg-2));
+      font-family: Arial, sans-serif;
+      text-align: center;
+      overflow-x: hidden;
+      padding: 20px;
+    }
+
+
+        /* Proposal and Success Frames */
+    .modal-proposal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.48);
+      z-index: 1200;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .modal-proposal[aria-hidden="false"] { display: flex; }
+
+    .proposal-content {
+      background: #fff;
+      border-radius: 18px;
+      padding: 28px;
+      max-width: 680px;
+      width: 96%;
+      box-shadow: 0 30px 70px rgba(0,0,0,0.22);
+      text-align: center;
+      position: relative;
+      overflow: visible;
+    }
+
+    .proposal-text {
+      font-family: 'Dancing Script', cursive;
+      color: #d83d6e;
+      font-size: 2.6rem;
+      margin-bottom: 1.25rem;
+      line-height: 1.02;
+    }
+
+    .proposal-actions {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      align-items: center;
+      min-height: 72px;
+      direction: ltr;
+    }
+
+    .proposal-btn {
+      padding: 12px 20px;
+      border-radius: 14px;
+      border: none;
+      font-weight: 900;
+      font-size: 1.12rem;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      transition: transform .12s ease, box-shadow .12s ease, left .18s ease, top .18s ease;
+      user-select: none;
+      position: static;
+    }
+
+    .yes-btn {
+      background: linear-gradient(180deg,#d83d6e,#c0345f);
+      color: #fff;
+    }
+
+    .no-btn {
+      background: #f6f6f6;
+      color: #333;
+      border: 1px solid rgba(0,0,0,0.04);
+    }
+
+    .proposal-extra {
+      display: none;
+      margin-top: 14px;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .proposal-extra img {
+      max-width: 420px;
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.16);
+      transform: translateY(0);
+      transition: transform .45s cubic-bezier(.2,.9,.2,1), opacity .35s ease;
+      opacity: 1;
+    }
+
+    .proposal-extra.show img { transform: translateY(-8px); opacity: 1; }
+
+    .proposal-hint {
+      color: #d83d6e;
+      font-weight: 900;
+      font-size: 1.05rem;
+    }
+
+    /* Success frame styles */
+    .success-content {
+      background: #fff;
+      border-radius: 16px;
+      padding: 18px;
+      max-width: 600px;
+      width: 92%;
+      box-shadow: 0 30px 70px rgba(0,0,0,0.22);
+      text-align: center;
+    }
+
+    .success-text {
+      font-family: 'Dancing Script', cursive;
+      color: #d83d6e;
+      font-size: 2.2rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .success-image {
+      width: 100%;
+      max-width: 460px;
+      border-radius: 12px;
+      box-shadow: 0 14px 40px rgba(0,0,0,0.16);
+      display: block;
+      margin: 0 auto;
+    }
+
+    /* Responsive tweaks */
+    @media (max-width: 720px) {
+      .proposal-text { font-size: 1.9rem; }
+      .proposal-content { padding: 18px; }
+      .proposal-extra img { max-width: 300px; }
+      .success-text { font-size: 1.6rem; }
+    }
+
+    /* زر البداية */
+    #click-button {
+      background-color: var(--accent);
+      color: white;
+      padding: 1.25rem 2.5rem;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+      font-family: 'Dancing Script', 'Segoe UI', Tahoma, sans-serif;
+      transition: background-color 0.3s;
+      font-weight: bold;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      width: 320px;
+      max-width: 100%;
+    }
+    #click-button:hover { background-color: var(--accent-2); box-shadow: 0 7px 20px rgba(0,0,0,0.3); }
+    #main-text { font-size: 1.25rem; margin-bottom: 0.25rem; }
+    #caption { color: white; font-size: 1rem; font-family: 'Dancing Script', cursive; margin: 0; }
+
+    /* شاشات وبطاقات */
+    .card{
+      background-color: var(--card-bg);
+      padding: 2rem;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      max-width: 360px;
+      width: 100%;
+    }
+    .title { font-family: 'Dancing Script', cursive; color: var(--accent); font-size: 1.5rem; margin-bottom: 1.5rem; font-weight: bold; }
+
+    #code-input {
+      width: 90%;
+      padding: 0.9rem;
+      margin-bottom: 1rem;
+      border: 2px solid var(--accent);
+      border-radius: var(--radius-md);
+      font-size: 1.125rem;
+      text-align: center;
+      outline: none;
+    }
+    .enter-button {
+      background-color: var(--accent);
+      color: white;
+      padding: 0.6rem 1.25rem;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.125rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .enter-button:hover { background-color: var(--accent-2); }
+
+    #error-message { color: red; margin-top: 0.5rem; font-size: 0.9rem; display: none; }
+
+    #welcome-message-screen {
+      display: none;
+      color: var(--accent);
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.25rem;
+      font-weight: bold;
+      padding: 2rem;
+      background-color: white;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      transform: rotate(-3deg);
+      z-index: 10;
+    }
+    #welcome-message-screen .inner-text { transform: rotate(3deg); display: block; }
+
+    /* شاشة A New Beginning */
+    #new-beginning-screen {
+      display: none;
+      color: var(--accent);
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.75rem;
+      font-weight: bold;
+      padding: 2.5rem 2rem;
+      background-color: white;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      transform: rotate(-2deg);
+      z-index: 10;
+    }
+    #new-beginning-screen .inner-text { transform: rotate(2deg); display: block; }
+
+    /* شاشة الرسالة اللي بتتكتب لوحدها */
+    #typewriter-screen {
+      display: flex;         
+      flex-direction: column; /* ده السحر اللي هيخليهم تحت بعض */
+      align-items: center;    /* عشان يسنتر الورقة والزرار في نص الشاشة بالظبط */
+      justify-content: center;
+    }
+
+    #typewriter-screen .paper {
+      background-color: #fffdf8;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        transparent,
+        transparent 34px,
+        rgba(216,61,110,0.08) 35px
+      );
+      border-radius: 12px;
+      box-shadow: var(--shadow-soft);
+      padding: 2.5rem 2rem;
+      min-height: 320px;
+      text-align: left;
+      direction: ltr;
+      position: relative;
+    }
+
+    #typewriter-screen .paper::before {
+      content: "";
+      position: absolute;
+      top: 0; bottom: 0; left: 46px;
+      width: 2px;
+      background: rgba(216,61,110,0.15);
+    }
+
+    #typewriter-text {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.6rem;
+      line-height: 1.9;
+      color: #4a3b3b;
+      white-space: pre-wrap;
+      margin: 0 0 0 20px;
+      min-height: 1.9em;
+    }
+
+    .typewriter-cursor {
+      display: inline-block;
+      color: var(--accent);
+      font-weight: bold;
+      animation: blinkCursor 0.9s steps(1) infinite;
+      font-size: 1.6rem;
+    }
+
+    .typewriter-cursor.hidden { display: none; }
+    @keyframes blinkCursor { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+    /* 2. تعديل الزرار بتاعك (شيلنا منه الـ flex-direction لأن ملوش لازمة هنا) */
+    #typewriter-continue-btn {
+      display: none;          /* هيفضل مخفي لحد ما الـ JS يظهره */
+      margin: 1.5rem auto 0;  /* الـ 1.5rem دي هتعمل مسافة حلوة بينه وبين الورقة من فوق */
+    }
+    @media (max-width: 500px) {
+      #new-beginning-screen { font-size: 2rem; padding: 1.75rem 1.25rem; }
+      #typewriter-text, .typewriter-cursor { font-size: 1.25rem; }
+      #typewriter-screen .paper { padding: 1.75rem 1.25rem; }
+    }
+
+    /* تأثير القلوب */
+    #heart-effect-screen {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      overflow: hidden;
+      z-index: 50;
+      pointer-events: none;
+    }
+    .heart {
+      position: absolute;
+      background-color: var(--accent);
+      width: 20px; height: 20px;
+      transform: rotate(-45deg);
+      animation: floatUp 4s infinite ease-in-out;
+      opacity: 0;
+      bottom: -50px;
+    }
+    .heart::before, .heart::after {
+      content: "";
+      position: absolute;
+      width: 20px; height: 20px;
+      background-color: var(--accent);
+      border-radius: 50%;
+    }
+    .heart::before { top: -10px; left: 0; }
+    .heart::after { left: 10px; top: 0; }
+    @keyframes floatUp {
+      0% { transform: translateY(0) rotate(-45deg) scale(0); opacity: 0; }
+      20% { opacity: 1; transform: translateY(-100px) rotate(-45deg) scale(1); }
+      100% { transform: translateY(-800px) rotate(-45deg) scale(1.5); opacity: 0; }
+    }
+
+    /* landing top bar */
+    #landing-page { display: none; width: 90%; max-width: 900px; background-color: white; padding: 1.5rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); position: relative; z-index: 10; }
+    #landing-page .top-bar { display:flex; justify-content:center; flex-wrap:wrap; gap:var(--gap); margin-bottom:0; }
+    #landing-page .top-bar button { background-color: #f7d2d2; color: var(--accent); padding: 0.5rem 1rem; border: 2px solid var(--accent); border-radius: 30px; font-size: 1rem; font-weight:bold; cursor:pointer; display:flex; align-items:center; gap:8px; min-width:120px; justify-content:center; }
+    #landing-page .top-bar button:hover { background-color: var(--accent); color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+
+    /* شاشات المحتوى */
+    .screen-container {
+      display: none;
+      width: 90%;
+      max-width: 900px;
+      background-color: white;
+      padding: 1.5rem;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      z-index: 10;
+      direction: ltr;
+      text-align: left;
+    }
+    .screen-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem; }
+    .screen-header h3 { font-family: 'Dancing Script', cursive; color: var(--accent); font-size: 2rem; margin:0; text-align:left; }
+    .screen-header button { background-color:#f7d2d2; color:var(--accent); padding:0.4rem 0.9rem; border:2px solid var(--accent); border-radius:20px; font-size:0.95rem; cursor:pointer; }
+    .screen-header button:hover { background-color:var(--accent); color:white; }
+
+    /* gallery */
+    #gallery-screen .gallery-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:20px; }
+    .gallery-item { background-color:#eee; border-radius:15px; overflow:hidden; box-shadow:0 4px 10px rgba(0,0,0,0.1); aspect-ratio:1/1; display:flex; justify-content:center; align-items:center; }
+    .gallery-item img { width:100%; height:100%; object-fit:cover; display:block; }
+
+    /* notes */
+    .note-item { background-color: var(--accent); color:white; padding:0.9rem 1.25rem; margin-bottom:0.75rem; border-radius:10px; font-size:1.125rem; font-weight:bold; box-shadow:0 4px 8px rgba(0,0,0,0.1); transition: transform 0.2s; text-align:left; }
+    .note-item:hover { transform: translateY(-2px); background-color: var(--accent-2); }
+
+    /* letter */
+    .letter-title-bar { border:2px dashed var(--accent); border-radius:15px; padding:1.25rem; margin-bottom:1.25rem; background-color: #fffafa; cursor:pointer; transition: background-color 0.3s; position:relative; }
+    .letter-title-bar:hover { background-color:#ffe8ee; }
+    .letter-title-bar h4 { font-family:'Dancing Script', cursive; color:var(--accent); font-size:1.5rem; margin:0; display:inline-block; }
+    .letter-title-bar .open-hint { position:absolute; top:50%; right:20px; transform:translateY(-50%); color:var(--accent); font-size:0.9rem; }
+    .actual-letter-content { display:none; background-color:#fff; padding:1.25rem; border-radius:15px; border:1px solid #f0f0f0; box-shadow: inset 0 0 10px rgba(0,0,0,0.05); line-height:1.8; color:#444; font-size:1rem; white-space:pre-wrap; text-align:justify; margin-bottom:1rem; }
+
+    /* music */
+    .song-item { background-color: var(--muted); padding:0.9rem 1rem; margin-bottom:0.75rem; border-radius:10px; transition: background-color 0.3s, border-left 0.3s; display:flex; align-items:center; justify-content:space-between; gap:15px; border-left:5px solid transparent; box-shadow:0 2px 5px rgba(0,0,0,0.05); }
+    .song-item:hover { background-color:#ffe8ee; border-left:5px solid var(--accent); }
+    .song-details { display:flex; flex-direction:column; text-align:left; }
+    .song-title { color:var(--accent); font-weight:bold; font-size:1.125rem; }
+    .song-artist { color:#888; font-size:0.9rem; }
+    .song-item.playing { background-color:#f7d2d2; border-left:5px solid var(--accent); }
+    .play-pause-btn { background-color:var(--accent); color:white; border:none; border-radius:50%; width:40px; height:40px; display:flex; justify-content:center; align-items:center; font-size:1rem; cursor:pointer; transition: background-color 0.2s, transform 0.1s; flex-shrink:0; }
+    .play-pause-btn:hover { background-color:var(--accent-2); transform:scale(1.05); }
+
+    /* movies */
+    .movies-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px; }
+    .movie-item { position:relative; cursor:pointer; border-radius:15px; overflow:hidden; box-shadow:0 5px 15px rgba(0,0,0,0.1); transition: transform 0.2s; aspect-ratio:16/9; }
+    .movie-item:hover { transform:translateY(-5px); }
+    .movie-item img { width:100%; height:100%; object-fit:cover; display:block; }
+    .movie-overlay { position:absolute; top:0; left:0; width:100%; height:100%; background-color:rgba(216,61,110,0.7); color:white; font-size:50px; display:flex; justify-content:center; align-items:center; opacity:0; transition:opacity 0.3s; }
+    .movie-item:hover .movie-overlay { opacity:1; }
+
+    /* modal */
+    .modal { display:none; position:fixed; z-index:200; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.8); padding-top:50px; }
+    .modal-content { background-color:#fefefe; margin:5% auto; padding:1.25rem; border-radius:15px; width:90%; max-width:800px; position:relative; text-align:center; }
+    #video-title { color:var(--accent); font-family:'Dancing Script', cursive; font-size:1.75rem; margin-bottom:0.75rem; }
+    #movie-player { width:100%; max-height:80vh; display:block; border-radius:10px; }
+    .close-btn { color:var(--accent); font-size:2rem; font-weight:bold; position:absolute; top:10px; right:20px; cursor:pointer; transition:color 0.3s; }
+    .close-btn:hover, .close-btn:focus { color:var(--accent-2); text-decoration:none; }
+
+    /* responsive tweaks */
+    @media (max-width: 500px) {
+      #gallery-screen .gallery-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap:10px; }
+      #movies-screen .movies-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap:10px; }
+      #main-text { font-size:1.125rem; }
+      #caption { font-size:1rem; }
+      .screen-container { padding:1rem; width:95%; }
+      .screen-header h3 { font-size:1.5rem; }
+    }
+
+    /* focus visibility */
+    button:focus, input:focus, .close-btn:focus { outline: 3px solid rgba(216,61,110,0.18); outline-offset:3px; }
+
+    /* reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .heart, .enter-button, #click-button, .song-item, .note-item { animation:none !important; transition:none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="initial-screen">
+    <button id="click-button" type="button" aria-label="ابدأ">
+      <span id="main-text">Click Here</span>
+      <span id="caption">perpetua my sweetheart</span>
+    </button>
+  </div>
+
+  <div id="secret-code-screen">
+    <div class="card" role="region" aria-labelledby="secret-title">
+      <div class="title" id="secret-title">Enter the secret code</div>
+      <input id="code-input" type="password" placeholder="•••••" inputmode="text" maxlength="40" aria-label="حقل إدخال الكود" autocomplete="off">
+      <button id="enter-btn" class="enter-button" type="button">Enter</button>
+      <p id="error-message" role="alert">رمز غير صحيح. حاول مرة أخرى!</p>
+    </div>
+  </div>
+
+  <div id="welcome-message-screen" aria-hidden="true">
+    <span class="inner-text">Welcome my love, enjoy your stay</span>
+  </div>
+
+  <!-- شاشة A New Beginning -->
+  <div id="new-beginning-screen" aria-hidden="true">
+    <span class="inner-text">A New Beginning ✨</span>
+  </div>
+
+  <!-- شاشة الـ Typewriter Letter -->
+  <div id="typewriter-screen" class="screen-container" aria-hidden="true">
+    <div class="paper">
+      <span id="typewriter-text"></span><span class="typewriter-cursor">|</span>
+    </div>
+    <button id="typewriter-continue-btn" class="enter-button" type="button">Continue</button>
+  </div>
+
+  <div id="heart-effect-screen" aria-hidden="true"></div>
+
+  <div id="landing-page" aria-hidden="true">
+    <div class="top-bar">
+      <button id="love-letter-btn" type="button" aria-controls="letter-screen"><span>❤️</span> Love Letter</button>
+      <button id="music-btn" type="button" aria-controls="music-screen"><span>🎵</span> Music</button>
+      <button id="notes-btn" type="button" aria-controls="notes-screen"><span>📝</span> Notes</button>
+      <button id="gallery-btn" type="button" aria-controls="gallery-screen"><span>🖼️</span> Gallery</button>
+      <button id="movies-btn" type="button" aria-controls="movies-screen"><span>🎬</span> Movies</button>
+    </div>
+  </div>
+
+  <div id="gallery-screen" class="screen-container" dir="ltr" aria-hidden="true">
+    <div class="screen-header">
+      <h3>My Lovely Gallery</h3>
+      <button id="back-to-landing-gallery-btn" type="button">Back</button>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item"><img src="images/WhatsApp Image 2025-11-25 at 11.25.20 PM.jpeg" alt="Photo 1" loading="lazy"></div>
+      <div class="gallery-item"><img src="images/WhatsApp Image 2025-11-25 at 11.25.21 PM (1).jpeg" alt="Photo 2" loading="lazy"></div>
+      <div class="gallery-item"><img src="images/WhatsApp Image 2025-11-25 at 11.25.21 PM (2).jpeg" alt="Photo 3" loading="lazy"></div>
+      <div class="gallery-item"><img src="images/WhatsApp Image 2025-11-25 at 11.25.21 PM.jpeg" alt="Photo 4" loading="lazy"></div>
+      <div class="gallery-item"><img src="images/WhatsApp Image 2025-11-25 at 11.25.22 PM (1).jpeg" alt="Photo 5" loading="lazy"></div>
+      <div class="gallery-item"><img src="images/WhatsApp Image 2025-11-25 at 11.25.22 PM (2).jpeg" alt="Photo 6" loading="lazy"></div>
+      <div class="gallery-item"><img src="images/WhatsApp Image 2025-11-25 at 11.25.22 PM.jpeg" alt="Photo 7" loading="lazy"></div>
+      <div class="gallery-item"><img src="images/WhatsApp Image 2025-11-25 at 11.25.23 PM (1).jpeg" alt="Photo 8" loading="lazy"></div>
+      <div class="gallery-item"><img src="images/WhatsApp Image 2025-11-25 at 11.25.23 PM (2).jpeg" alt="Photo 9" loading="lazy"></div>
+      <div class="gallery-item"><img src="images/WhatsApp Image 2025-11-25 at 11.25.23 PM.jpeg" alt="Photo 10" loading="lazy"></div>
+      <div class="gallery-item"><img src="images/WhatsApp Image 2025-11-25 at 11.25.24 PM (1).jpeg" alt="Photo 11" loading="lazy"></div>
+      <div class="gallery-item"><img src="images/WhatsApp Image 2025-11-25 at 11.25.24 PM (2).jpeg" alt="Photo 12" loading="lazy"></div>
+      <div class="gallery-item"><img src="images/WhatsApp Image 2025-11-25 at 11.25.24 PM.jpeg" alt="Photo 13" loading="lazy"></div>
+      <div class="gallery-item"><img src="images/القمر الاصلي.png" alt="Photo 14" loading="lazy"></div>
+
+    </div>
+  </div>
+
+  <div id="notes-screen" class="screen-container" dir="ltr" aria-hidden="true">
+    <div class="screen-header">
+      <h3>Some Reminders</h3>
+      <button id="back-to-landing-notes-btn" type="button">Back</button>
+    </div>
+    <div class="notes-container">
+      <div class="note-item">I love you baby</div>
+      <div class="note-item">always iam so proud of you Hun</div>
+      <div class="note-item">Take care always</div>
+      <div class="note-item">Eat on time</div>
+      <div class="note-item">You're mine.. always</div>
+      <div class="note-item">Merry Christmas my lovely girl perpetua my queen🌲❄️❤️</div>
+      <div class="note-item">MY BABY GIRL PATTYYYYYY I LOVE YOU SO MUCH</div>
+      <div class="note-item">hello baby</div>
+      <div class="note-item">MWAHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH</div>
+      <div class="note-item">Never forget how much I love you!</div>
+    </div>
+  </div>
+
+  <div id="letter-screen" class="screen-container" dir="ltr" aria-hidden="true">
+    <div class="screen-header">
+      <h3>My Dearest</h3>
+      <button id="back-to-landing-letter-btn" type="button">Back</button>
+    </div>
+
+    <div class="letter-title-bar" role="button" tabindex="0">
+      <h4>A Letter For You (1)</h4>
+      <span class="open-hint">Click to open →</span>
+    </div>
+    <div class="actual-letter-content">
+      My love,
+
+      Every moment spent with you feels like a beautiful dream that I never want to wake up from. Your smile lights up my darkest days, and your laughter is my favorite melody.
+
+      I cherish every moment we spend together, from our silly inside jokes to our deep conversations under the stars. You've shown me what true happiness feels like, and I'm forever grateful to have you in my life.
+
+      No matter where life takes us, always remember that my heart belongs to you.
+
+      I love you my sweetheart i love you my baby girl ❤️
+
+      Yours,
+      [Abanoub]
+    </div>
+
+    <div class="letter-title-bar" role="button" tabindex="0">
+      <h4>A Letter For You (2)</h4>
+      <span class="open-hint">Click to open →</span>
+    </div>
+    <div class="actual-letter-content">
+      My lovely ptabeet
+
+      I love you so much my baby girl ana bklmk delwa2ty fl telephone asln
+
+      ana b7abk awii awiiiiiiiiiiiiii bgad you are my favourite lovely girl,
+      iam proud of you hun always iam proud of you,
+
+      w h2blk youm el etnen b2zn rabna, w shofy b2a el hy7sl hbhrk😉😘.
+
+      kbrty ya patota w ba2ety 21 sana ya3ne 3arosa amoraaaa awiiiii.
+
+      tb3an 3arosa ah w kol 7aga bas ana el 3aresss kda kdaa😊.
+
+      ana b7abk awi ya perpetua khody balk dyman mn nfsk please for me
+      7ta
+
+      yala b2a 3lshan enty 3amala t2oly 3yza t2flyy ll2asaaf 😭.
+
+      i love you my sweetheart❤️.
+      Yours,
+      [Abanoub]
+    </div>
+
+    <div class="letter-title-bar" role="button" tabindex="0">
+      <h4>A Letter For You (3)</h4>
+      <span class="open-hint">Click to open →</span>
+    </div>
+    <div class="actual-letter-content">
+      Hello paty
+
+      i know enty z3lana mny w da 7a2k aked
+
+      m3 en ana kaman z3lan b2mana awi
+
+      bas ana m2drsh ady3 youm zye da ana hnzl w h2blk w yarb bgad el youm y3gbk
+      hgeb ward w hno3od fy aunt loulou ana 3arf mn el sana el fatt w enty nfsk no3od feh
+
+      i love you ya perpetua ana b7abk b2aman w ba3edan 3n ay za3al aw ay 7aga wa7sha
+      sad2ene b7abk w b7b abstk w nfsy dyman tb2e merta7a m3aya
+
+      w ana msh 3arf 3lafkra m7otkesh fy 7tet enk (my home)
+
+      l2ny automatic b2mana b2lb a child kda m3aky w a7s eny mbsot kda w btntt mn gowaya
+      w ana mot2kd b2mana en da hy7sl awl ma ashofk el nharda
+
+      yarb el youm ybstk w ana b2mana h7awl a3ml kol 7aga bgad tbstk el nhrada hun
+
+      w yarb tshofy el letter da mn nfsk msh 3ayz a2olk aft7y shofy 3yzk tshofeh mn nfsk bas msh 3arf da hy7sl wala l2
+      ana asf ya perpetua 3la ay za3l w ay ta3b ana sad2ene b7abk bgonon w nfsy dyman afdl m3aky
+
+      i love you my sweetheart❤️
+      yours,
+      [Abanoub]
+    </div>
+
+    <div class="letter-title-bar" role="button" tabindex="0">
+      <h4>A Letter For You (4)</h4>
+      <span class="open-hint">Click to open →</span>
+    </div>
+    <div class="actual-letter-content">
+      Hello paty
+
+      8/12/2025
+      it's 1.57AM
+      enty nyma tb3an delwa2ty
+      w ana i miss you so so much b2mana ya3ne
+      i love you so much bardo
+      heeeeeeeeeeeeeeeeeee7 i miss youuuuuuuuuuuuuuu
+      ptabeet
+      i miss my patbota
+      iam proud of you hun btw
+      w h2olk ser 🤫
+      (el ser fl satr el sades)
+      ra7t fl noum el ptabeet
+      nyma nena el kotypoty el cutaa yallhwe 3la 7lwatha 2at2ota kda
+      take care of youself babe
+      i misss you awiiiiiiiiiiiiiiii bgaddddddddddddddddddddd
+
+      yours,
+      [Abanoub]
+    </div>
+
+    <div class="letter-title-bar" role="button" tabindex="0">
+      <h4>A Letter For You (5)</h4>
+      <span class="open-hint">Click to open →</span>
+    </div>
+    <div class="actual-letter-content">
+      Hello My Girl
+
+      10/12/2025
+      it's 12.17AM
+      w tb3an enty nyma delw2ty
+      ana msh 3arf ht2ry da emta bas atmna t2reh el sob7 lama ts7y
+      ana 3ayz a2olk en iam so proud of you baby
+      w you are doing great bgad
+      w msh 3ayz tb2e stress kda ya 7ebebty raban m3aky w ana m3aky
+      w kol da hy3dy ya 7bebt 2alby w enty 2ado bgad
+      w kda kda ana wasq en ay 7aga ht3mleha htb2a 7lwa bgad ya 7bebty
+      i trust you babe, i trust in your skils
+      7bebty enty feke 7agat gamela awi
+      (ENTY KOLKKK GAMELAAAA AASLNNNNN)
+      I love you babe
+      OHH NO NO SORRY I FORGOT
+      (I ADORE YOUUUUUU❤️❤️❤️❤️❤️❤️❤️)
+
+      w ah abl ma ansa eb2y khoshy 3la el music fy awl Christmas Song
+      that remids me of you babe❤️
+      yours,
+      [Abanoub]
+    </div>
+
+    <div class="letter-title-bar" role="button" tabindex="0">
+      <h4>A Letter For You (6)</h4>
+      <span class="open-hint">Click to open →</span>
+    </div>
+    <div class="actual-letter-content">
+      Hello perpetua
+
+      25/12/2025
+      howa mktob youm 22/12/2025
+      bas hynzlk youm el khames el howa 25/12/2025
+      akher letter kont katbo kona m3 b3d w mknsh fy mashkl
+      bena w kont katbo w enty nayma 3lshan konty mdghota awi
+      fa kont 3ayz ashg3k w ab2a gmbk kda w a2olk en ad eh ana fakhour beke
+      ana nfsy nsal7 kol el mashkl el bena w nrg3 tany nkoun a7sn mn el awl
+      together w n7awl dyman tany m3 b3d
+      ana b7abk w msh 3ayz akhsrk msh 3ayz tkony msh mwgoda fy 7yaty
+      ana tb3an ghltan fy akher mara eny 2olt msh hkaml w sbtk tany
+      w ya3ne leke kol el 7a2 enk tz3aly w tdy2e mn dah
+      bas b2mana ana h7awl tany w inshallah el nharda el howa
+      el youm el ht2ry feh el letter ykoun youm 7lw ana mkhtatlo
+      w ya3ne mzbato w b2zn rabna da el youm el nrg3 feh
+      w nrg3 tany m3 b3d l2nna a7la m3 b3d w 3laqtna gamela awi b2mana ya3ne
+      ana h3ml kol el effort el mtlob mny
+      w h7awl asl7 kol 7aga etkasrt
+      a3tqd sa3tha hyb2a ynf3 a2ol i love you
+      you are my sweetheart, you are my baby sweet girl, the most beautiful Girl
+      i have ever seen.
+      (Wanna be my girlfriend)
+      rody 3lya in real life ana 2a3d odamk delwa2ty
+      2olele mwaf2a wala l2
+
+      yours,
+      [Abanoub]
+    </div>
+
+    <div class="letter-title-bar" role="button" tabindex="0">
+      <h4>A Letter For You (7)</h4>
+      <span class="open-hint">Click to open →</span>
+    </div>
+    <div class="actual-letter-content">
+      Hello perpetua
+
+      31/12/2025
+      Hello my love
+      The last day of the year...
+      I don't know how I would have entered a new year without you.
+      Thank God I'm entering it with you.
+      I love you so much. We spent a year together,
+      through thick and thin.
+      I hope we learn from it and benefit from all the experiences
+      we've had together. I want you to know that I love you
+      and that one day we'll be spending this day together
+      in one house, sitting next to each other,around Christmas tree.
+      God willing, we'll be watching HomeAlone together,
+      snuggled up on a cozy bed,
+      eating something sweet,
+      and wearing our Christmas clothes. 
+      I hope we learn even more in the new year,
+      and I'm so proud of everything you've done this year.
+      I'm truly proud of everything you've done,
+      and I love you so much! I hope we can be better together,
+      that we can comfort each other, help each other,
+      and support each other. I'm sorry for anything bad that happened.
+      I did it for you this year,
+      and I promise I'll try to improve,
+      but also promise me
+      that you'll try to see what bothers me and try to improve it.
+      I love you so much and I'm so proud of you,
+      and you're the most beautiful girl in the world.
+      I pray to God that He protects you and is always by your side,
+      never leaving you for a moment, and that He protects you
+      from all evil and guides you to all that is good,
+      and opens your eyes to all that is beautiful for you,
+      and in the new year, that He lets you meet People
+      who love and help you,
+      not people who upset and hurt you. 
+      I hope to be a better person for you,
+      I hope to make you comfortable,
+      to always make you feel loved. 
+      I pray to God that you achieve all your dreams
+      and that 2026 will be a beautiful year for you,
+      and that you reach all your dreams.
+      May God be with you, my love, and may we always be together.
+      Happy New Year, my darling , my sunshine , my baby girl ,
+      rapunzel my queen , my sweetheart I love you so much.❤️
+
+      this is the last letter in 2025 i hope you like it
+
+      yours,
+      [Abanoub]
+    </div>
+
+      <div class="letter-title-bar" role="button" tabindex="0">
+      <h4>A Letter For You (8)</h4>
+      <span class="open-hint">Click to open →</span>
+    </div>
+    <div class="actual-letter-content">
+      Hi perpetua
+      21/3/2026
+
+      I know we've had a lot of problems.
+      I know a lot of things have broken.
+      I know we've had so many issues.
+      I wish we could start a new chapter together.
+      I wish we could start over.
+      I'll do everything to make you feel valued.
+      I'll do everything to make you happy, joyful, and secure.
+      I hope our love lasts forever.
+      I hope we can come back even better than before.
+      I'm sorry for everything bad I did to you.
+      I'm sorry for everything that happened; you didn't deserve any of it.
+      You're my baby girl and the love of my life.
+      I can't imagine my life without you.
+      I can't imagine another mother for my children.
+      I can't imagine a friend, sister, lover, and princess other than you.
+      You're the most beautiful person my eyes have ever seen, and they never will.
+      You're everything I have. You're everything beautiful in my life.
+      I promise you everything will get better. I promise you'll feel safe again
+      Because you deserve all the good things in the world.
+      Because you deserve a better life, and you deserve someone to give their life for you.
+      I love you, my love, my princess, my sweetheart, my baby girl.
+      b7abk w bamot feke 
+      
+      yours,
+      [Abanoub]
+    </div>
+
+          <div class="actual-letter-content">
+          Hi perpetua 
+          I just want to say one thing:
+          I can't imagine my life without you.
+          that's it
+          yours,
+          [Abanoub]
+    </div>
+
+    <div class="letter-title-bar" role="button" tabindex="0">
+      <h4>A Letter For You (9)</h4>
+      <span class="open-hint">Click to open →</span>
+    </div>
+
+  </div>
+
+  <div id="music-screen" class="screen-container" dir="ltr" aria-hidden="true">
+    <div class="screen-header">
+      <h3>Songs that remind me of you</h3>
+      <button id="back-to-landing-music-btn" type="button">Back</button>
+    </div>
+
+    <div class="songs-container">
+      <div class="song-item" data-src="audio/be-my-baby.mp3" data-title="be my baby" data-artist="The Ronettes">
+        <div class="song-content">
+          <span class="song-icon">🎶</span>
+          <div class="song-details">
+            <span class="song-title">be my baby</span>
+            <span class="song-artist">by The Ronettes</span>
+          </div>
+        </div>
+        <button class="play-pause-btn" data-action="play" type="button" aria-label="تشغيل be my baby">▶</button>
+      </div>
+
+      <div class="song-item" data-src="audio/zay-manty.mp3" data-title="Zay-Manty" data-artist="Amr Diab">
+        <div class="song-content">
+          <span class="song-icon">🎶</span>
+          <div class="song-details">
+            <span class="song-title">Zay-Manty</span>
+            <span class="song-artist">by Amr Diab</span>
+          </div>
+        </div>
+        <button class="play-pause-btn" data-action="play" type="button" aria-label="تشغيل Zay-Manty">▶</button>
+      </div>
+
+      <div class="song-item" data-src="audio/cant-take-my-eyes-off-you.mp3" data-title="Can't Take My Eyes Off You" data-artist="Frankie Valli">
+        <div class="song-content">
+          <span class="song-icon">🎶</span>
+          <div class="song-details">
+            <span class="song-title">Can't Take My Eyes Off You</span>
+            <span class="song-artist">by Frankie Valli</span>
+          </div>
+        </div>
+        <button class="play-pause-btn" data-action="play" type="button" aria-label="تشغيل Can't Take My Eyes Off You">▶</button>
+      </div>
+
+      <div class="song-item" data-src="audio/last-christmas.mp3" data-title="Last Christmas" data-artist="Wham">
+        <div class="song-content">
+          <span class="song-icon">🎶</span>
+          <div class="song-details">
+            <span class="song-title">Last Christmas</span>
+            <span class="song-artist">Wham</span>
+          </div>
+        </div>
+        <button class="play-pause-btn" data-action="play" type="button" aria-label="تشغيل Last Christmas">▶</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="movies-screen" class="screen-container" dir="ltr" aria-hidden="true">
+    <div class="screen-header">
+      <h3>Our Movies</h3>
+      <button id="back-to-landing-movies-btn" type="button">Back</button>
+    </div>
+
+    <div class="movies-grid">
+      <div class="movie-item" data-video-src="video/Mickey's Once Upon A Christmas.mp4" data-title="Mickey's Once Upon A Christmas">
+        <img src="images/miceky mouse once upon a christmas.webp" alt="Mickey's Once Upon A Christmas" loading="lazy">
+        <span class="movie-overlay">▶</span>
+      </div>
+      <div class="movie-item" data-video-src="video/La.La.Land.2016..mp4" data-title="La La Land">
+        <img src="images/la la land.jpg" alt="La La Land" loading="lazy">
+        <span class="movie-overlay">▶</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="video-modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-content">
+      <button class="close-btn" type="button" aria-label="إغلاق الفيديو">&times;</button>
+      <h4 id="video-title"></h4>
+      <video id="movie-player" controls></video>
+    </div>
+  </div>
+
+  <audio id="audio-player" preload="none"></audio>
+
+  <!-- Proposal Frame -->
+<div id="proposal-frame" class="modal-proposal" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="proposal-content" role="document">
+    <div class="proposal-text">wanna be my girlfriend</div>
+
+    <div class="proposal-actions" id="proposal-actions">
+      <button id="proposal-yes" class="proposal-btn yes-btn" type="button">Yes</button>
+      <button id="proposal-no" class="proposal-btn no-btn" type="button">No</button>
+    </div>
+
+    <div id="proposal-extra" class="proposal-extra" aria-hidden="true">
+      <img id="proposal-image" src="images/82332c13dc36a5c7eee2e98ab9136a8f.jpg" alt="proposal image" loading="lazy">
+      <div class="proposal-hint">say yes pleaseee</div>
+    </div>
+  </div>
+</div>
+
+<!-- Success Frame -->
+<div id="success-frame" class="modal-proposal" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="success-content" role="document">
+    <div class="success-text">i knew it yayyyyyyyyyyy</div>
+    <img id="success-image" class="success-image" src="images/3efde8f254542d9039e64ad2bb21964ba6-23-lalaland-yellow-dress.2x.rhorizontal.w710.webp" alt="celebration image" loading="lazy">
+  </div>
+</div>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const SECRET_CODE = 'i love perpetua';
+      const WELCOME_DISPLAY_TIME = 3000;
+      const HEART_EFFECT_TIME = 7000;
+      const HEART_INTERVAL_MS = 150;
+      const MAX_HEARTS = 40;
+
+      // المكان اللي بتكتب فيه رسالة الـ Typewriter
+      const TYPEWRITER_TEXT = "Hello my love,\n  This is a new beginning for us.\n  I promise to make you happy every single day...\n  I know I was wrong.\n  I know I made a lot of promises I didn't keep,\n  and I know I let you down many times.\n  I want to fix everything and start fresh together.\n  I have never loved anyone the way I love you,\n  and I never will\n  you mean the world to me.\n  I hope you’ll give me a new chance to repair everything I broke.\n  I’m sorry for falling short,\n  for not giving you the love and attention you deserve,\n  and for neglecting our relationship.\n  I promise to make things right\n  and we can go back to being the Abanoub and perpetua we used to be.\n  These are just a few words from the heart,\n  and I pray you’ll accept them.\n  I love you.\n  Click continue to see your world ❤️";
+      
+      let typewriterIndex = 0;
+      const typewriterSpeed = 60; // السرعة بالملي ثانية بين كل حرف والتاني
+
+      function typeWriter() {
+        if (typewriterIndex < TYPEWRITER_TEXT.length) {
+          const textEl = document.getElementById('typewriter-text');
+          if (textEl) {
+            textEl.textContent += TYPEWRITER_TEXT.charAt(typewriterIndex);
+          }
+          typewriterIndex++;
+          setTimeout(typeWriter, typewriterSpeed);
+        } else {
+          // إظهار زرار المتابعة لما الكتابة تخلص
+          const btn = document.getElementById('typewriter-continue-btn');
+          if (btn) btn.style.display = 'block';
+        }
+      }
+
+      const audioPlayer = document.getElementById('audio-player');
+      let currentPlayingItem = null;
+      let currentPlayingButton = null;
+      let heartIntervalId = null;
+      let createdHeartsCount = 0;
+
+      const videoModal = document.getElementById('video-modal');
+      const moviePlayer = document.getElementById('movie-player');
+      const videoTitle = document.getElementById('video-title');
+      const closeBtn = document.querySelector('.modal .close-btn');
+
+      // Ensure buttons have explicit type
+      document.querySelectorAll('button:not([type])').forEach(b => b.setAttribute('type', 'button'));
+
+const screenDisplayMap = {
+        'initial-screen': 'flex',
+        'secret-code-screen': 'block',
+        'welcome-message-screen': 'block',
+        'new-beginning-screen': 'block', // <-- ضيف ده
+        'typewriter-screen': 'flex',      // <-- ضيف ده
+        'heart-effect-screen': 'block',
+        'landing-page': 'block',
+        'gallery-screen': 'block',
+        'notes-screen': 'block',
+        'letter-screen': 'block',
+        'music-screen': 'block',
+        'movies-screen': 'block'
+      };
+
+      function hideAllScreens() {
+        Object.keys(screenDisplayMap).forEach(id => {
+          const el = document.getElementById(id);
+          if (el) {
+            el.style.display = 'none';
+            el.setAttribute('aria-hidden', 'true');
+          }
+        });
+      }
+
+      function showScreen(screenId) {
+        if (screenId !== 'music-screen' && audioPlayer.src && !audioPlayer.paused) {
+          audioPlayer.pause();
+          if (currentPlayingItem) currentPlayingItem.classList.remove('playing');
+          if (currentPlayingButton) {
+            currentPlayingButton.textContent = '▶';
+            currentPlayingButton.setAttribute('data-action', 'play');
+          }
+          currentPlayingItem = null;
+          currentPlayingButton = null;
+        }
+
+        closeModal();
+        hideAllScreens();
+
+        const screenElement = document.getElementById(screenId);
+        if (screenElement) {
+          const displayValue = screenDisplayMap[screenId] || 'block';
+          screenElement.style.display = displayValue;
+          screenElement.setAttribute('aria-hidden', 'false');
+        }
+      }
+
+      function createHeart() {
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        if (createdHeartsCount >= MAX_HEARTS) return;
+
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.animationDuration = (Math.random() * 2 + 3).toFixed(2) + 's';
+        heart.style.animationDelay = (Math.random() * 1).toFixed(2) + 's';
+        heart.style.willChange = 'transform, opacity';
+        document.getElementById('heart-effect-screen').appendChild(heart);
+
+        createdHeartsCount++;
+        heart.addEventListener('animationend', () => {
+          heart.remove();
+          createdHeartsCount = Math.max(0, createdHeartsCount - 1);
+        });
+      }
+
+      function startHeartEffect() {
+        showScreen('heart-effect-screen');
+        createdHeartsCount = 0;
+        heartIntervalId = setInterval(createHeart, HEART_INTERVAL_MS);
+
+        setTimeout(() => {
+          clearInterval(heartIntervalId);
+          heartIntervalId = null;
+          setTimeout(() => {
+            const container = document.getElementById('heart-effect-screen');
+            if (container) container.innerHTML = '';
+            showScreen('landing-page');
+          }, 800);
+        }, HEART_EFFECT_TIME);
+      }
+
+      function togglePlayPause(button) {
+        const songItem = button.closest('.song-item');
+        if (!songItem) return;
+        const songSrc = songItem.getAttribute('data-src');
+
+        if (button.getAttribute('data-action') === 'pause') {
+          audioPlayer.pause();
+          button.textContent = '▶';
+          button.setAttribute('data-action', 'play');
+          songItem.classList.remove('playing');
+          currentPlayingButton = null;
+          currentPlayingItem = null;
+          return;
+        }
+
+        if (currentPlayingButton && currentPlayingButton !== button) {
+          currentPlayingButton.textContent = '▶';
+          currentPlayingButton.setAttribute('data-action', 'play');
+          if (currentPlayingItem) currentPlayingItem.classList.remove('playing');
+        }
+
+        audioPlayer.src = songSrc;
+        const playPromise = audioPlayer.play();
+        if (playPromise !== undefined) {
+          playPromise.then(() => {
+            button.textContent = '⏸';
+            button.setAttribute('data-action', 'pause');
+            songItem.classList.add('playing');
+            currentPlayingButton = button;
+            currentPlayingItem = songItem;
+          }).catch(err => {
+            console.warn('Audio play prevented:', err);
+            button.textContent = '▶';
+            button.setAttribute('data-action', 'play');
+          });
+        } else {
+          button.textContent = '⏸';
+          button.setAttribute('data-action', 'pause');
+          songItem.classList.add('playing');
+          currentPlayingButton = button;
+          currentPlayingItem = songItem;
+        }
+      }
+
+      function openModal(videoSrc, title) {
+        if (!videoSrc) return;
+        videoTitle.textContent = title || '';
+        moviePlayer.src = videoSrc;
+        videoModal.style.display = 'block';
+        videoModal.setAttribute('aria-hidden', 'false');
+        moviePlayer.play().catch(() => {});
+      }
+
+      function closeModal() {
+        if (!videoModal) return;
+        if (videoModal.style.display === 'block') {
+          videoModal.style.display = 'none';
+          videoModal.setAttribute('aria-hidden', 'true');
+          moviePlayer.pause();
+          moviePlayer.removeAttribute('src');
+          if (moviePlayer.load) moviePlayer.load();
+        }
+      }
+
+      // Events
+      const clickButton = document.getElementById('click-button');
+      if (clickButton) clickButton.addEventListener('click', () => showScreen('secret-code-screen'));
+
+      const enterBtn = document.getElementById('enter-btn');
+      const codeInput = document.getElementById('code-input');
+      const errorMessage = document.getElementById('error-message');
+
+      if (enterBtn && codeInput) {
+        enterBtn.addEventListener('click', () => {
+          const userInput = (codeInput.value || '').trim().toLowerCase();
+            if (userInput === SECRET_CODE.toLowerCase()) {
+            if (errorMessage) errorMessage.style.display = 'none';
+            codeInput.value = '';
+            
+            // 1. يظهر رسالة Welcome
+            showScreen('welcome-message-screen');
+            
+            setTimeout(() => {
+              // 2. بعد 3 ثواني تظهر شاشة A New Beginning
+              showScreen('new-beginning-screen');
+              
+              setTimeout(() => {
+                // 3. بعد ثانيتين تظهر شاشة الـ Typewriter وتبدأ تكتب
+                showScreen('typewriter-screen');
+                typeWriter();
+              }, 2000);
+              
+            }, WELCOME_DISPLAY_TIME);
+          } else {
+            if (errorMessage) errorMessage.style.display = 'block';
+            codeInput.value = '';
+          }
+        });
+
+        codeInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            enterBtn.click();
+          }
+        });
+      }
+
+      const mapButtons = {
+        'gallery-btn': 'gallery-screen',
+        'notes-btn': 'notes-screen',
+        'love-letter-btn': 'letter-screen',
+        'music-btn': 'music-screen',
+        'movies-btn': 'movies-screen'
+      };
+      Object.keys(mapButtons).forEach(btnId => {
+        const el = document.getElementById(btnId);
+        if (el) el.addEventListener('click', () => showScreen(mapButtons[btnId]));
+      });
+
+      ['back-to-landing-gallery-btn', 'back-to-landing-notes-btn', 'back-to-landing-letter-btn', 'back-to-landing-music-btn', 'back-to-landing-movies-btn']
+        .forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.addEventListener('click', () => showScreen('landing-page'));
+        });
+
+      // play buttons
+      document.querySelectorAll('.play-pause-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+          e.stopPropagation();
+          togglePlayPause(this);
+        });
+      });
+
+      audioPlayer.addEventListener('ended', () => {
+        if (currentPlayingButton) {
+          currentPlayingButton.textContent = '▶';
+          currentPlayingButton.setAttribute('data-action', 'play');
+          if (currentPlayingItem) currentPlayingItem.classList.remove('playing');
+          currentPlayingButton = null;
+          currentPlayingItem = null;
+        }
+      });
+
+      // movie items
+      document.querySelectorAll('.movie-item').forEach(item => {
+        item.addEventListener('click', function() {
+          const src = this.getAttribute('data-video-src');
+          const title = this.getAttribute('data-title');
+          openModal(src, title);
+        });
+      });
+
+      if (closeBtn) closeBtn.addEventListener('click', closeModal);
+      if (videoModal) {
+        videoModal.addEventListener('click', (e) => {
+          if (e.target === videoModal) closeModal();
+        });
+      }
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeModal();
+      });
+
+      // letter toggles
+      document.querySelectorAll('.letter-title-bar').forEach(titleBar => {
+        titleBar.addEventListener('click', function() {
+          const letterContent = this.nextElementSibling;
+          const openHint = this.querySelector('.open-hint');
+          if (letterContent && openHint) {
+            if (letterContent.style.display === 'block') {
+              letterContent.style.display = 'none';
+              openHint.innerHTML = 'Click to open →';
+            } else {
+              document.querySelectorAll('.actual-letter-content').forEach(content => content.style.display = 'none');
+              document.querySelectorAll('.letter-title-bar .open-hint').forEach(hint => hint.innerHTML = 'Click to open →');
+              letterContent.style.display = 'block';
+              openHint.innerHTML = 'Click to close ↓';
+            }
+          }
+        });
+        // keyboard accessibility
+        titleBar.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            this.click();
+          }
+        });
+      });
+
+      document.addEventListener('DOMContentLoaded', () => {
+        showScreen('initial-screen');
+      });
+
+      // Proposal and Success behavior
+(function(){
+  const proposalFrame = document.getElementById('proposal-frame');
+  const proposalYes = document.getElementById('proposal-yes');
+  const proposalNo = document.getElementById('proposal-no');
+  const proposalExtra = document.getElementById('proposal-extra');
+  const successFrame = document.getElementById('success-frame');
+  const clickButton = document.getElementById('click-button');
+  const secretScreen = document.getElementById('secret-code-screen');
+
+  // Open proposal when initial button clicked
+  if (clickButton && proposalFrame) {
+    clickButton.addEventListener('click', () => {
+      proposalFrame.style.display = 'flex';
+      proposalFrame.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+
+      // hide extra initially
+      if (proposalExtra) {
+        proposalExtra.style.display = 'none';
+        proposalExtra.setAttribute('aria-hidden', 'true');
+        proposalExtra.classList.remove('show');
+      }
+
+      // show image and hint after 5 seconds
+      setTimeout(() => {
+        if (proposalExtra) {
+          proposalExtra.style.display = 'flex';
+          proposalExtra.setAttribute('aria-hidden', 'false');
+          setTimeout(() => proposalExtra.classList.add('show'), 20);
+        }
+      }, 5000);
+
+      // focus yes for accessibility
+      setTimeout(() => { proposalYes && proposalYes.focus(); }, 50);
+    });
+  }
+
+  // No button playful movement
+  if (proposalNo) {
+    const btn = proposalNo;
+    const container = btn.closest('.proposal-content');
+    const original = { position: btn.style.position || '', left: btn.style.left || '', top: btn.style.top || '', transform: btn.style.transform || '' };
+
+    btn.addEventListener('mouseenter', () => {
+      if (!container) return;
+      if (getComputedStyle(container).position === 'static') container.style.position = 'relative';
+
+      const containerRect = container.getBoundingClientRect();
+      const btnRect = btn.getBoundingClientRect();
+      const margin = 14;
+      const maxLeft = Math.max(0, containerRect.width - btnRect.width - margin);
+      const maxTop = Math.max(0, containerRect.height - btnRect.height - margin);
+
+      const randLeft = Math.floor(Math.random() * (maxLeft + 1));
+      const randTop = Math.floor(Math.random() * (maxTop + 1));
+
+      btn.style.position = 'absolute';
+      btn.style.left = randLeft + 'px';
+      btn.style.top = randTop + 'px';
+      btn.style.transform = 'translate(0,0)';
+    });
+
+    btn.addEventListener('mouseleave', () => {
+      setTimeout(() => {
+        btn.style.position = original.position;
+        btn.style.left = original.left;
+        btn.style.top = original.top;
+        btn.style.transform = original.transform;
+      }, 700);
+    });
+  }
+
+  // Yes click: show success then go to secret code screen
+  if (proposalYes) {
+    proposalYes.addEventListener('click', () => {
+      if (proposalFrame) {
+        proposalFrame.style.display = 'none';
+        proposalFrame.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
+
+      if (successFrame) {
+        successFrame.style.display = 'flex';
+        successFrame.setAttribute('aria-hidden', 'false');
+
+        setTimeout(() => {
+          successFrame.style.display = 'none';
+          successFrame.setAttribute('aria-hidden', 'true');
+
+          // show secret code screen
+          if (secretScreen) {
+            // hide initial screen if present
+            const initial = document.getElementById('initial-screen');
+            if (initial) initial.style.display = 'none';
+            secretScreen.style.display = 'block';
+            secretScreen.setAttribute('aria-hidden', 'false');
+          }
+        }, 5000);
+      } else {
+        if (secretScreen) {
+          const initial = document.getElementById('initial-screen');
+          if (initial) initial.style.display = 'none';
+          secretScreen.style.display = 'block';
+          secretScreen.setAttribute('aria-hidden', 'false');
+        }
+      }
+    });
+  }
+
+  // Close proposal by clicking outside or pressing Escape
+  if (proposalFrame) {
+    proposalFrame.addEventListener('click', (e) => {
+      if (e.target === proposalFrame) {
+        proposalFrame.style.display = 'none';
+        proposalFrame.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
+    });
+  }
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (proposalFrame && proposalFrame.style.display === 'flex') {
+        proposalFrame.style.display = 'none';
+        proposalFrame.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
+      if (successFrame && successFrame.style.display === 'flex') {
+        successFrame.style.display = 'none';
+        successFrame.setAttribute('aria-hidden', 'true');
+      }
+    }
+  });
+      // تشغيل زرار المتابعة في شاشة الخطاب
+      const typewriterContinueBtn = document.getElementById('typewriter-continue-btn');
+      if (typewriterContinueBtn) {
+        typewriterContinueBtn.addEventListener('click', () => {
+          startHeartEffect();
+        });
+      }
+})();
+    })();
+
+  </script>
+</body>
+</html>
